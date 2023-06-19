@@ -1,0 +1,178 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// Employee class
+class Employee {
+private:
+    string name;
+    int id;
+    double salary;
+
+public:
+    // Constructor
+    Employee(string name, int id, double salary) {
+        this->name = name;
+        this->id = id;
+        this->salary = salary;
+    }
+
+    // Getter methods
+    string getName() const {
+        return name;
+    }
+
+    int getId() const {
+        return id;
+    }
+
+    double getSalary() const {
+        return salary;
+    }
+
+    // Setter methods
+    void setSalary(double salary) {
+        this->salary = salary;
+    }
+
+    // Display employee details
+    void display() const {
+        cout << "Name: " << name << endl;
+        cout << "ID: " << id << endl;
+        cout << "Salary: $" << salary << endl;
+    }
+};
+
+// EmployeeManagementSystem class
+class EmployeeManagementSystem {
+private:
+    vector<Employee> employees;
+
+public:
+    // Add employee to the system
+    void addEmployee(Employee employee) {
+        employees.push_back(employee);
+    }
+
+    // Display all employees' details
+    void displayAllEmployees() const {
+        for (const Employee& employee : employees) {
+            employee.display();
+            cout << "------------------------" << endl;
+        }
+    }
+
+    // Search for an employee by ID
+    void searchEmployeeById(int id) const {
+        bool found = false;
+        for (const Employee& employee : employees) {
+            if (employee.getId() == id) {
+                employee.display();
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            cout << "Employee with ID " << id << " not found." << endl;
+        }
+    }
+
+    // Update an employee's salary by ID
+    void updateEmployeeSalary(int id, double newSalary) {
+        bool found = false;
+        for (Employee& employee : employees) {
+            if (employee.getId() == id) {
+                employee.setSalary(newSalary);
+                cout << "Salary updated successfully." << endl;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            cout << "Employee with ID " << id << " not found." << endl;
+        }
+    }
+};
+
+int main() {
+    EmployeeManagementSystem system;
+
+    int numEmployees;
+    cout << "Enter the number of employees: ";
+    cin >> numEmployees;
+
+    cin.ignore(); // Ignore the remaining newline character
+
+    for (int i = 0; i < numEmployees; i++) {
+        string name;
+        int id;
+        double salary;
+
+        cout << "\nEnter employee details for Employee #" << (i + 1) << ":" << endl;
+        cout << "Name: ";
+        getline(cin, name);
+        cout << "ID: ";
+        cin >> id;
+        cout << "Salary: ";
+        cin >> salary;
+
+        cin.ignore(); // Ignore the remaining newline character
+
+        system.addEmployee(Employee(name, id, salary));
+    }
+
+    // Display all employees
+    cout << "\nAll Employees:" << endl;
+    system.displayAllEmployees();
+    cout << endl;
+
+    // Menu
+    while (true) {
+        cout << "Menu:" << endl;
+        cout << "1. Search employee by ID" << endl;
+        cout << "2. Update employee salary" << endl;
+        cout << "3. Exit" << endl;
+
+        int choice;
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                // Search for an employee by ID
+                int searchId;
+                cout << "Enter employee ID to search: ";
+                cin >> searchId;
+                system.searchEmployeeById(searchId);
+                cout << endl;
+                break;
+            }
+            case 2: {
+                // Update an employee's salary
+                int updateId;
+                double salaryIncrease;
+
+                cout << "Enter employee ID to update salary: ";
+                cin >> updateId;
+                cout << "Enter the amount to increase the salary: ";
+                cin >> salaryIncrease;
+
+                system.updateEmployeeSalary(updateId, salaryIncrease);
+
+                // Display all employees again
+                cout << "\nAll Employees:" << endl;
+                system.displayAllEmployees();
+                cout << endl;
+                break; 
+            }
+            case 3:
+                // Exit the program
+                cout << "Exiting..." << endl;
+                return 0;
+            default:
+                cout << "Wrong command. Please try again." << endl;
+        }
+
+        cin.ignore(); // Ignore the remaining newline character
+    }
+}
